@@ -9,6 +9,10 @@ LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 class Settings(BaseSettings):
     COMICS_PATH: Path = Path("comics")
+    API_VK_URL: AnyHttpUrl
+    CLIENT_ID: str
+    ACCESS_TOKEN: str
+    GROUP_ID: str
     XKCD_URL: AnyHttpUrl
     RETRY_COUNT: int = 5
     STATUS_FORCE_LIST: str = "429,500,502,503,504"

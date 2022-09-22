@@ -39,6 +39,10 @@ cp .env.example .env
   <summary>Переменные окружения</summary>
   <pre>
     COMICS_PATH=comics
+    API_VK_URL=https://api.vk.com/method/
+    CLIENT_ID=
+    ACCESS_TOKEN=
+    GROUP_ID=
     XKCD_URL=https://xkcd.com/353/info.0.json
     RETRY_COUNT=5
     STATUS_FORCE_LIST=429,500,502,503,504
