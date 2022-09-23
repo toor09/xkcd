@@ -6,7 +6,13 @@ from random import randint
 from requests import ConnectionError, HTTPError
 
 from settings import LOGGING_CONFIG, Settings
-from utils import create_dirs, get_file_name, get_session, sanitize_file_path
+from utils import (
+    create_dirs,
+    get_file_name,
+    get_session,
+    remove_comic,
+    sanitize_file_path
+)
 from vk_operations import (
     get_upload_url,
     publish_comic,
@@ -24,7 +30,7 @@ logging.config.dictConfig(LOGGING_CONFIG)
 
 
 def main() -> None:
-    """Main entry for publishing comic books in group VK."""
+    """Main entry for publishing comics in group VK."""
     settings = Settings()
     create_dirs(settings=settings)
     session = get_session(settings=settings)
@@ -79,7 +85,7 @@ def main() -> None:
         )
         owner_id = saved_comic["response"][0]["owner_id"]
         media_id = saved_comic["response"][0]["id"]
-        publish_comic(
+        published_comic = publish_comic(
             session=session,
             url=f"{settings.API_VK_URL}wall.post",
             access_token=settings.ACCESS_TOKEN,
@@ -88,6 +94,11 @@ def main() -> None:
             attachments=f"photo{owner_id}_{media_id}",
             message=image_info['comments']
         )
+        if published_comic["response"]['post_id']:
+            remove_comic(
+                comic_path=settings.COMICS_PATH,
+                comic_filename=comic_file_name
+            )
 
     except HTTPError as err:
         logger.exception(msg=err)

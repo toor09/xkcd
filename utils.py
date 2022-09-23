@@ -47,4 +47,15 @@ def create_dirs(settings: Settings) -> None:
 
 def get_file_name(url: str) -> str:
     """Return filename from url."""
-    return os.path.split(p=url)[-1]
+    file_name = os.path.split(p=url)[-1]
+    return f"{sanitize_filename(filename=file_name, platform='auto')}"
+
+
+def remove_comic(comic_path: Union[Path, str], comic_filename: str) -> None:
+    """Remove comic file."""
+    sanitized_file_path = sanitize_file_path(
+        file_path=comic_path,
+        file_name=comic_filename
+    )
+    if os.path.isfile(sanitized_file_path):
+        os.remove(sanitized_file_path)
