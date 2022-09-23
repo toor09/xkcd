@@ -2,6 +2,8 @@ import logging
 
 from requests import Session
 
+from settings import VKSettings
+
 logger = logging.getLogger(__name__)
 
 
@@ -15,7 +17,7 @@ def get_upload_url(
     payload = {
         "access_token": access_token,
         "group_id": group_id,
-        "v": 5.131
+        "v": VKSettings().VK_VERSION
     }
     server_info = session.post(url=url, data=payload)
     server_info.raise_for_status()
@@ -60,7 +62,7 @@ def save_comic(
         "hash": comic_hash,
         "access_token": access_token,
         "group_id": group_id,
-        "v": 5.131
+        "v": VKSettings().VK_VERSION
     }
 
     new_comic = session.post(url=url, data=payload)
@@ -86,7 +88,7 @@ def publish_comic(
         "message": message,
         "attachments": attachments,
         "access_token": access_token,
-        "v": 5.131
+        "v": VKSettings().VK_VERSION
     }
     new_comic_post = session.post(url=url, data=payload)
     new_comic_post.raise_for_status()

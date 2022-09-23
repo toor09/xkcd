@@ -8,13 +8,6 @@ LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 
 class Settings(BaseSettings):
-    COMICS_PATH: Path = Path("comics")
-    API_VK_URL: AnyHttpUrl
-    CLIENT_ID: int
-    ACCESS_TOKEN: str
-    GROUP_ID: int
-    XKCD_BASE_URL: AnyHttpUrl
-    XKCD_BASE_URI: str
     RETRY_COUNT: int = 5
     TIMEOUT: int = 10
     STATUS_FORCE_LIST: str = "429,500,502,503,504"
@@ -42,6 +35,19 @@ class Settings(BaseSettings):
     class Config:
         case_sensitive = True
         env_file = ".env"
+
+
+class VKSettings(Settings):
+    VK_API_URL: AnyHttpUrl
+    VK_ACCESS_TOKEN: str
+    VK_GROUP_ID: int
+    VK_VERSION: float = 5.131
+
+
+class XKCDSettings(Settings):
+    COMICS_PATH: Path = Path("comics")
+    XKCD_BASE_URL: AnyHttpUrl
+    XKCD_BASE_URI: str
 
 
 LOGGING_CONFIG = {

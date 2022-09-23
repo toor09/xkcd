@@ -7,7 +7,7 @@ from pathvalidate import sanitize_filename, sanitize_filepath
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-from settings import Settings
+from settings import Settings, XKCDSettings
 
 
 def get_session(
@@ -36,7 +36,7 @@ def sanitize_file_path(file_path: Union[Path, str], file_name: str) -> str:
     return sanitized_file_path
 
 
-def create_dirs(settings: Settings) -> None:
+def create_dirs(settings: XKCDSettings) -> None:
     """Creates dirs for downloaded files."""
     images_path = sanitize_filepath(
         file_path=settings.COMICS_PATH,
