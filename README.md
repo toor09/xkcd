@@ -39,12 +39,11 @@ cp .env.example .env
   <summary>Переменные окружения</summary>
   <pre>
     COMICS_PATH=comics
-    API_VK_URL=https://api.vk.com/method/
-    CLIENT_ID=
-    ACCESS_TOKEN=
-    GROUP_ID=
     XKCD_BASE_URL=https://xkcd.com
     XKCD_BASE_URI=/info.0.json
+    VK_API_URL=https://api.vk.com/method/
+    VK_ACCESS_TOKEN=
+    VK_GROUP_ID=
     RETRY_COUNT=5
     TIMEOUT=10
     STATUS_FORCE_LIST=429,500,502,503,504
@@ -53,6 +52,11 @@ cp .env.example .env
   </pre>
 </details>
 
+*** Необходимо сначала создать [новое сообщество в VK](https://vk.com/groups?tab=admin), а также [standalone-приложение](https://vk.com/apps?act=manage). Нужен будет `client_id` приложения. ***
+
+*** Для работы c VK API необходимо заполнить переменные окружения `VK_ACCESS_TOKEN` и `VK_GROUP_ID`. Подробности на [vk.com](https://vk.com/dev/implicit_flow_user).***
+
+*** Потребуются следующие права `photos`, `groups`, `wall` и `offline` для того, чтобы приложение имело доступ к вашему аккаунту и могло публиковать сообщения в группах. ***
 
 ## Запуск линтеров
 
@@ -62,8 +66,12 @@ isort . && flake8 . && mypy .
 ## Запуск 
 - Для публикации комиксов в группе VK вводим команду:
 ```
- python main.py
+ python3 main.py
 ```
+
+## Пример результата
+
+![vk_xkcd](static/vk_xkcd.gif)
 
 ## Цели проекта
 Код написан в образовательных целях на онлайн-курсе для веб-разработчиков [Devman](https://dvmn.org).
