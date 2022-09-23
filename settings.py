@@ -10,11 +10,12 @@ LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 class Settings(BaseSettings):
     COMICS_PATH: Path = Path("comics")
     API_VK_URL: AnyHttpUrl
-    CLIENT_ID: str
+    CLIENT_ID: int
     ACCESS_TOKEN: str
-    GROUP_ID: str
+    GROUP_ID: int
     XKCD_URL: AnyHttpUrl
     RETRY_COUNT: int = 5
+    TIMEOUT: int = 10
     STATUS_FORCE_LIST: str = "429,500,502,503,504"
     ALLOWED_METHODS: str = "HEAD,GET,OPTIONS"
     LOGGING_LEVEL: str = "ERROR"
@@ -67,7 +68,7 @@ LOGGING_CONFIG = {
         },
     },
     "loggers": {
-        "main": {
+        "": {
             "handlers": ["default", "rotating_to_file"],
             "level": Settings().LOGGING_LEVEL,
             "propagate": True
