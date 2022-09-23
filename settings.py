@@ -13,7 +13,8 @@ class Settings(BaseSettings):
     CLIENT_ID: int
     ACCESS_TOKEN: str
     GROUP_ID: int
-    XKCD_URL: AnyHttpUrl
+    XKCD_BASE_URL: AnyHttpUrl
+    XKCD_BASE_URI: str
     RETRY_COUNT: int = 5
     TIMEOUT: int = 10
     STATUS_FORCE_LIST: str = "429,500,502,503,504"

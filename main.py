@@ -1,10 +1,10 @@
 import logging
 import logging.config
 import time
+from random import randint
 
 from requests import ConnectionError, HTTPError
 
-from download import download_comic_image, get_image_info
 from settings import LOGGING_CONFIG, Settings
 from utils import create_dirs, get_file_name, get_session, sanitize_file_path
 from vk_operations import (
@@ -12,6 +12,11 @@ from vk_operations import (
     publish_comic,
     save_comic,
     upload_comic
+)
+from xkcd_operations import (
+    download_comic_image,
+    get_image_info,
+    get_max_comic_id
 )
 
 logger = logging.getLogger(__name__)
@@ -24,21 +29,30 @@ def main() -> None:
     create_dirs(settings=settings)
     session = get_session(settings=settings)
     try:
-        image_info = get_image_info(session=session, url=settings.XKCD_URL)
-        if image_info["link"]:
-            comic_file_name = get_file_name(url=image_info["link"])
-            comic_file_path = sanitize_file_path(
-                file_path=settings.COMICS_PATH,
-                file_name=comic_file_name
-            )
-            download_comic_image(
-                session=session,
-                url=image_info["link"],
-                filename=comic_file_path
-            )
-            message = f"Был скачан комикс `{comic_file_name}`. " \
-                      f"Комментарии: {image_info['comments']}"
-            logger.debug(msg=message)
+        max_comic_id = get_max_comic_id(
+            session=session,
+            url=f"{settings.XKCD_BASE_URL}{settings.XKCD_BASE_URI}"
+        )
+
+        random_comic_id = randint(1, max_comic_id)
+        comic_url = f"{settings.XKCD_BASE_URL}/{random_comic_id}" \
+                    f"{settings.XKCD_BASE_URI}"
+
+        image_info = get_image_info(session=session, url=comic_url)
+
+        comic_file_name = get_file_name(url=image_info["link"])
+        comic_file_path = sanitize_file_path(
+            file_path=settings.COMICS_PATH,
+            file_name=comic_file_name
+        )
+        download_comic_image(
+            session=session,
+            url=image_info["link"],
+            filename=comic_file_path
+        )
+        message = f"Был скачан комикс `{comic_file_name}`. " \
+                  f"Комментарии: {image_info['comments']}"
+        logger.debug(msg=message)
 
         upload_comic_url = get_upload_url(
             session=session,
@@ -51,7 +65,7 @@ def main() -> None:
             url=upload_comic_url,
             comic_path=sanitize_file_path(
                 file_path=settings.COMICS_PATH,
-                file_name="python.png"
+                file_name=comic_file_name
             )
         )
         saved_comic = save_comic(
