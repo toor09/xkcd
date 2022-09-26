@@ -1,5 +1,5 @@
 import sys
-from pathlib import Path
+
 from typing import List
 
 from pydantic import AnyHttpUrl, BaseSettings, validator
@@ -45,7 +45,6 @@ class VKSettings(Settings):
 
 
 class XKCDSettings(Settings):
-    COMICS_PATH: Path = Path("comics")
     XKCD_BASE_URL: AnyHttpUrl
     XKCD_BASE_URI: str
 

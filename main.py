@@ -1,14 +1,15 @@
 import logging
 import logging.config
+import os
 import time
 from pathlib import Path
 from random import randint
 
-from pathvalidate import sanitize_filename
+from pathvalidate import sanitize_filename, sanitize_filepath
 from requests import ConnectionError, HTTPError
 
 from settings import LOGGING_CONFIG, Settings, VKSettings, XKCDSettings
-from utils import create_dirs, get_session, remove_comic, sanitize_file_path
+from utils import get_session
 from vk_operations import (
     get_upload_url,
     publish_comic,
@@ -30,7 +31,6 @@ def main() -> None:
     settings = Settings()
     xkcd_settings = XKCDSettings()
     vk_settings = VKSettings()
-    create_dirs(settings=xkcd_settings)
     session = get_session(settings=settings)
     try:
         max_comic_id = get_max_comic_id(
@@ -48,14 +48,14 @@ def main() -> None:
             filename=Path(image_comic["link"]).name,
             platform="auto"
         )
-        comic_file_path = sanitize_file_path(
-            file_path=xkcd_settings.COMICS_PATH,
-            file_name=comic_file_name  # type: ignore
+        comic_filepath = sanitize_filepath(
+            file_path=comic_file_name,
+            platform="auto"
         )
         download_comic_image(
             session=session,
             url=image_comic["link"],
-            filename=comic_file_path
+            filename=comic_filepath  # type: ignore
         )
         message = f"Был скачан комикс `{comic_file_name}`. " \
                   f"Комментарии: {image_comic['comments']}"
@@ -68,10 +68,7 @@ def main() -> None:
         uploaded_comic = upload_comic(
             session=session,
             url=upload_comic_url,
-            comic_path=sanitize_file_path(
-                file_path=xkcd_settings.COMICS_PATH,
-                file_name=comic_file_name  # type: ignore
-            )
+            comic_path=comic_filepath  # type: ignore
         )
         saved_comic = save_comic(
             session=session,
@@ -98,10 +95,7 @@ def main() -> None:
         time.sleep(settings.TIMEOUT)
 
     finally:
-        remove_comic(
-            comic_path=xkcd_settings.COMICS_PATH,
-            comic_filename=comic_file_name  # type: ignore
-        )
+        os.remove(path=comic_filepath)
 
 
 if __name__ == "__main__":
