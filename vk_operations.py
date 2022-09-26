@@ -7,16 +7,11 @@ from settings import VKSettings
 logger = logging.getLogger(__name__)
 
 
-def get_upload_url(
-        session: Session,
-        url: str,
-        access_token: str,
-        group_id: int
-) -> str:
+def get_upload_url(session: Session, url: str) -> str:
     """Get upload_url for uploading comic to VK storage."""
     payload = {
-        "access_token": access_token,
-        "group_id": group_id,
+        "access_token": VKSettings().VK_ACCESS_TOKEN,
+        "group_id": VKSettings().VK_GROUP_ID,
         "v": VKSettings().VK_VERSION
     }
     server_info = session.post(url=url, data=payload)
@@ -49,8 +44,6 @@ def upload_comic(
 def save_comic(
         session: Session,
         url: str,
-        access_token: str,
-        group_id: int,
         comic: str,
         comic_hash: str,
         server: str
@@ -60,8 +53,8 @@ def save_comic(
         "server": server,
         "photo": comic,
         "hash": comic_hash,
-        "access_token": access_token,
-        "group_id": group_id,
+        "access_token": VKSettings().VK_ACCESS_TOKEN,
+        "group_id": VKSettings().VK_GROUP_ID,
         "v": VKSettings().VK_VERSION
     }
 
@@ -75,7 +68,6 @@ def save_comic(
 def publish_comic(
         session: Session,
         url: str,
-        access_token: str,
         from_group: int,
         owner_id: int,
         attachments: str,
@@ -87,7 +79,7 @@ def publish_comic(
         "owner_id": owner_id,
         "message": message,
         "attachments": attachments,
-        "access_token": access_token,
+        "access_token": VKSettings().VK_ACCESS_TOKEN,
         "v": VKSettings().VK_VERSION
     }
     new_comic_post = session.post(url=url, data=payload)

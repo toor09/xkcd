@@ -31,7 +31,7 @@ def download_comic_image(
         url: str,
         filename: str
 ) -> None:
-    """ Download comic image from current page."""
+    """Download comic image from current page."""
     comic_book = session.get(url=url)
     comic_book.raise_for_status()
 
