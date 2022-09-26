@@ -45,12 +45,6 @@ def create_dirs(settings: XKCDSettings) -> None:
     os.makedirs(name=images_path, exist_ok=True)
 
 
-def get_file_name(url: str) -> str:
-    """Return filename from url."""
-    file_name = os.path.split(p=url)[-1]
-    return f"{sanitize_filename(filename=file_name, platform='auto')}"
-
-
 def remove_comic(comic_path: Union[Path, str], comic_filename: str) -> None:
     """Remove comic file."""
     sanitized_file_path = sanitize_file_path(

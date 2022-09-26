@@ -5,7 +5,7 @@ from requests import Session
 logger = logging.getLogger(__name__)
 
 
-def get_image_info(session: Session, url: str) -> dict:
+def get_image_comic(session: Session, url: str) -> dict:
     """Get info for comic image."""
     comic_book = session.get(url=url)
     comic_book.raise_for_status()
