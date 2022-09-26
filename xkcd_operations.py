@@ -1,20 +1,11 @@
 import logging
+from pathlib import Path
+from typing import Tuple, Union
 
+from pathvalidate import sanitize_filename, sanitize_filepath
 from requests import Session
 
 logger = logging.getLogger(__name__)
-
-
-def get_image_comic(session: Session, url: str) -> dict:
-    """Get info for comic image."""
-    comic_book = session.get(url=url)
-    comic_book.raise_for_status()
-    comic_book_info = comic_book.json()
-    logger.debug(msg=f"{comic_book_info=}")
-    return {
-        "link": comic_book_info["img"],
-        "comments": comic_book_info["alt"],
-    }
 
 
 def get_max_comic_id(session: Session, url: str) -> int:
@@ -28,12 +19,25 @@ def get_max_comic_id(session: Session, url: str) -> int:
 
 def download_comic_image(
         session: Session,
-        url: str,
-        filename: str
-) -> None:
+        comic_id: int
+) -> Tuple[str, Union[str, Path]]:
     """Download comic image from current page."""
-    comic_book = session.get(url=url)
+    comic_book = session.get(url=f"https://xkcd.com/{comic_id}/info.0.json")
+    comic_book.raise_for_status()
+    image_comic = comic_book.json()
+    logger.debug(msg=f"{image_comic=}")
+
+    comic_file_name = sanitize_filename(
+        filename=Path(image_comic["img"]).name,
+        platform="auto"
+    )
+    comic_filepath = sanitize_filepath(
+        file_path=comic_file_name,
+        platform="auto"
+    )
+    comic_book = session.get(url=image_comic["img"])
     comic_book.raise_for_status()
 
-    with open(file=filename, mode="wb") as file:
+    with open(file=comic_file_name, mode="wb") as file:
         file.write(comic_book.content)
+    return image_comic["alt"], comic_filepath

@@ -38,8 +38,6 @@ cp .env.example .env
 <details>
   <summary>Переменные окружения</summary>
   <pre>
-    XKCD_BASE_URL=https://xkcd.com
-    XKCD_BASE_URI=/info.0.json
     VK_API_URL=https://api.vk.com/method/
     VK_ACCESS_TOKEN=
     VK_GROUP_ID=

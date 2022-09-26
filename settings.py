@@ -43,11 +43,6 @@ class VKSettings(Settings):
     VK_VERSION: float = 5.131
 
 
-class XKCDSettings(Settings):
-    XKCD_BASE_URL: AnyHttpUrl
-    XKCD_BASE_URI: str
-
-
 LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": False,
