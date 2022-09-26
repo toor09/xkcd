@@ -1,7 +1,7 @@
 import sys
 from typing import List
 
-from pydantic import AnyHttpUrl, BaseSettings, validator
+from pydantic import BaseSettings, validator
 
 LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
@@ -37,7 +37,6 @@ class Settings(BaseSettings):
 
 
 class VKSettings(Settings):
-    VK_API_URL: AnyHttpUrl
     VK_ACCESS_TOKEN: str
     VK_GROUP_ID: int
     VK_VERSION: float = 5.131

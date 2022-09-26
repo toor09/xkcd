@@ -38,7 +38,6 @@ cp .env.example .env
 <details>
   <summary>Переменные окружения</summary>
   <pre>
-    VK_API_URL=https://api.vk.com/method/
     VK_ACCESS_TOKEN=
     VK_GROUP_ID=
     RETRY_COUNT=5
