@@ -68,10 +68,10 @@ def save_comic(
 def publish_comic(
         session: Session,
         url: str,
-        from_group: int,
-        owner_id: int,
         attachments: str,
-        message: str
+        message: str,
+        owner_id: int = -VKSettings().VK_GROUP_ID,
+        from_group: int = 1,
 ) -> dict:
     """Publish comic to the wall of VK group."""
     payload = {

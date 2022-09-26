@@ -86,8 +86,6 @@ def main() -> None:
         publish_comic(
             session=session,
             url=f"{vk_settings.VK_API_URL}wall.post",
-            from_group=1,
-            owner_id=-vk_settings.VK_GROUP_ID,
             attachments=f"photo{owner_id}_{media_id}",
             message=image_info['comments']
         )
