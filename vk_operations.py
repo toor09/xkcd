@@ -36,8 +36,8 @@ def upload_comic(
     with open(file=comic_path, mode="rb") as comic:
         files = {"photo": comic}
         new_comic = session.post(url=url, files=files)
-        new_comic.raise_for_status()
-        uploaded_comic = new_comic.json()
+    new_comic.raise_for_status()
+    uploaded_comic = new_comic.json()
     logger.debug(msg=f"{uploaded_comic=}")
     return {
         "photo": uploaded_comic["photo"],
