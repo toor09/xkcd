@@ -83,7 +83,7 @@ def main() -> None:
         )
         owner_id = saved_comic["response"][0]["owner_id"]
         media_id = saved_comic["response"][0]["id"]
-        published_comic = publish_comic(
+        publish_comic(
             session=session,
             url=f"{vk_settings.VK_API_URL}wall.post",
             from_group=1,
@@ -91,11 +91,6 @@ def main() -> None:
             attachments=f"photo{owner_id}_{media_id}",
             message=image_info['comments']
         )
-        if published_comic["response"]['post_id']:
-            remove_comic(
-                comic_path=xkcd_settings.COMICS_PATH,
-                comic_filename=comic_file_name
-            )
 
     except HTTPError as err:
         logger.exception(msg=err)
@@ -104,6 +99,12 @@ def main() -> None:
         message = f"Ошибка подключения :( {err}"
         logger.exception(msg=message)
         time.sleep(settings.TIMEOUT)
+
+    finally:
+        remove_comic(
+            comic_path=xkcd_settings.COMICS_PATH,
+            comic_filename=comic_file_name
+        )
 
 
 if __name__ == "__main__":
