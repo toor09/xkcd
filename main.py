@@ -63,7 +63,9 @@ def main() -> None:
 
         upload_comic_url = get_upload_url(
             session=session,
-            url=f"{vk_settings.VK_API_URL}photos.getWallUploadServer",
+            access_token=vk_settings.VK_ACCESS_TOKEN,
+            group_id=vk_settings.VK_GROUP_ID,
+            version=vk_settings.VK_VERSION
         )
         uploaded_comic = upload_comic(
             session=session,
@@ -72,18 +74,22 @@ def main() -> None:
         )
         saved_comic = save_comic(
             session=session,
-            url=f"{vk_settings.VK_API_URL}photos.saveWallPhoto",
+            access_token=vk_settings.VK_ACCESS_TOKEN,
+            group_id=vk_settings.VK_GROUP_ID,
             comic=uploaded_comic["photo"],
             comic_hash=uploaded_comic["hash"],
             server=uploaded_comic["server"],
+            version=vk_settings.VK_VERSION
         )
         owner_id = saved_comic["response"][0]["owner_id"]
         media_id = saved_comic["response"][0]["id"]
         publish_comic(
             session=session,
-            url=f"{vk_settings.VK_API_URL}wall.post",
+            access_token=vk_settings.VK_ACCESS_TOKEN,
+            owner_id=vk_settings.VK_GROUP_ID,
             attachments=f"photo{owner_id}_{media_id}",
-            message=image_comic['comments']
+            message=image_comic['comments'],
+            version=vk_settings.VK_VERSION
         )
 
     except HTTPError as err:
